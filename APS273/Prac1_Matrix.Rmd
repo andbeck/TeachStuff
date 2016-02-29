@@ -1,0 +1,327 @@
+---
+title: "APS 273 - Practical 1"
+author: "Dr. Andrew Beckerman"
+date: "24 February 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+suppressPackageStartupMessages(require(ggplot2))
+suppressPackageStartupMessages(require(dplyr))
+```
+
+## The Life Table
+During the module, you have learned about life tables.  Here you will construct one in R.  The starting point is this.
+
+|Age|Population Size|Fecundity|
+| --- | --- | --- |
+|0|500|0|
+|1|400|2|
+|2|200|3|
+|3|100|1|
+|4|50|0|
+
+Create this data frame in R.  Use the data.frame() function.
+Call it lt (life table).
+```{r, echo = FALSE}
+# INPUTS for the Life Table
+pop_size = c(500,400,200,50,0)
+ma = c(0,2,3,1,0)
+
+# LIFE TABLE
+lt<-data.frame(
+	age=c(0,1,2,3,4),
+	pop_size = pop_size,
+	ma=ma)
+```
+```{r}
+lt
+```
+
+
+Before we go any further, you need to recall/remember/be taught how [ ] work in R. It is a bit like the machine that makes select() and slice() work in dplyr. These are a tool to get pieces of a data frame or matrix.  The convention is `[row, column]` 
+
+For example, in your data frame
+
+```{r}
+lt[1,]
+lt[,2]
+lt[3,2]
+lt$ma[2] # look carefully at this.... using $ and [ ]
+```
+
+Importantly, note that R can do operations with these, and you can work with many rows or columns.
+
+```{r}
+lt[2:5,2] # rows 2:5 in column 2
+lt[2:5,2]/lt[1:4,2] # divide rows 2:5 by 1:4 in column 2
+```
+Now, use [ ]'s, dplyr and mutate() to add colums for la and pa.  Recall that la is the proportion of individuals surviving TO age a from age 0.  Recall that pa is the proportion of individuals surving from age a-1 to age a.
+
+One other think you need to recall is `c()`.  It is probably clear to you that you need to have an empty cell in the pa column.... and we never leave things empty, but fill them with `NA`.  So, think about how to use `c(NA, ....)` to generate your column.
+
+After you've been successful, you should have this:
+```{r, echo = FALSE}
+# MAKE the OTHER COLUMNS
+lt<-mutate(lt, la = pop_size/lt$pop_size[1])
+lt<-mutate(lt, pa = c(NA,la[2:5]/la[1:4]))
+```
+
+```{r}
+lt
+```
+
+Now, lets think about how to create a pre-breeding census Matrix.  The first step is calculating fertlilites.  In the pre-breeding matrix, Fertilities are a function of the ma and of the survival from age 0-1 only.  So only a single pa is used.... 
+
+Locate this pa and again use mutate() to generate a column in lt called Fa.  When you are successful, this should be what you have.
+
+```{r, echo = FALSE}
+lt<-mutate(lt, Fa = pa[2]*ma)
+```
+```{r}
+lt
+```
+
+OK.  Now we have the basics of a pre-breeding Model.  We have pa values for the transitions and we have Fa for the combination of babies produced and their survival to age 1.  Super.
+
+One a piece of paper now, draw the life cycle.
+
+OK.  Now, matrices.  They are quite easy in R, and map onto your life cycle.
+
+.|.|.|.
+---|---|---|---
+F1|F2|F3|F4
+p1|0|0|0
+0|p2|0|0
+0|0|p3|0
+.|.|.|.
+
+To construct this, you need to just think about [ ]'s again.  You've got a column of Fa that needs to go into a row in a matrix.  Matrices have row and column dimensions. Lets make one with NA's in it, and then fill it in.
+
+```{r}
+BP <- matrix(NA, nrow = 4, ncol = 4)
+BP
+```
+
+Great... perhaps you can see what we can do?
+
+```{r}
+# dump Fa column into BP row 1. 
+# (note we left out the first element)
+BP[1,] <- lt$Fa[2:5] 
+BP
+```
+
+Now, add the pa's yourself
+```{r, echo = FALSE}
+BP[2,1]<-lt$pa[2]
+BP[3,2]<-lt$pa[3]
+BP[4,3]<-lt$pa[4]
+```
+```{r}
+BP
+```
+
+Before we move on, however, we need to replace all those NA's in the matrix with 0...  This will make things work later on.
+
+```{r}
+is.na(BP) # shows you where the NA's are
+BP[is.na(BP)]<-0 # replaces the NA's with 0
+BP # see the result
+```
+
+We are ready to calculate things.  Lets first calcuate Ro from the life table.  Remember that Ro is the sum of the product of la and ma.  See if you can use dplyr and summarise() to generate this:
+
+```{r, echo = FALSE}
+Ro <- summarise(lt, Ro = sum(la*ma))
+```
+```{r}
+Ro
+```
+
+Cool.  Now, there are function in R to help get the eigenvalues.  Remember that the dominant eigenvalue is = lambda and r = ln(lambda) because e^r is lambda.  lambda >1 and r>0 are growing populations.
+
+The function that does this is, wait... eigen.  And it takes a matrix.  The matrix.
+
+```{r}
+eigen(BP)
+```
+
+So, `eigen(BP)$values[1]` is the dominant eigenvalue and is lambda, the population growth rate
+
+```{r}
+eigen(BP)$values[1]
+log(eigen(BP)$values[1])
+```
+
+## Projection
+OK.  So now we need to recall a tiny bit about how the matrix multiplication works to project a population into the future.  Projection requires that we specify a starting value (population size) for each age.  We can do that by creating a `vector` called N0.
+
+```{r}
+N0 <- c(2,2,2,2) # 4 values for 4 ages we are counting.
+```
+
+Matrix multiplication in R works with the `%*%` symbols.  We provide the matrix and vector.
+
+```{r}
+BP %*% N0
+```
+
+So, if we start Year 0 with 2 individuals in EACH age, in Year 1, this is what we have.  How can we do this a tonne of times and collect the data?  Here's how.
+
+First, we set up a collection zone for all the numbers.  We have 4 age classes, and we'll make these the columns.  Lets plan to project the matrix 25 years.  So we need 100 rows.  
+
+In R, one of the ways to make things fast is to generate all these slots to fill.  4 100 rows x 4 columns worth.  We can quickly make this with a matrix.  And then we can turn this into a data frame.
+
+```{r}
+nits <- 25 # how many years will we project
+tmp <- matrix(NA, nrow = nits, ncol = 4)
+collect <- data.frame(tmp)
+names(collect)<-c("Age1", "Age2","Age3", "Age4")
+head(collect) # just look at the first six rows
+```
+
+Right.  NOW, lets put our starting values into the first row.
+
+```{r}
+collect[1,] <- N0
+head(collect)
+```
+
+Sweet.  Now for some REAL programming.  Lets iteratively populate each row.  We start with Row 1 of collect, multiple this vector by the matrix BP, and push the results into Row 2.  If we then repeat this with Row 2, we get Row 3 and so on.  
+
+To do this, we will make a `for loop`:
+
+```{r}
+for (a in 2:nits){
+  collect[a,] <- BP %*% t(collect[(a-1),])
+  }
+```
+There is quite a lot there. Lets look at the pieces.
+
+* a is the counter.  It starts at 2, because that is the next row we will add to.  
+* a-1 looks back one row to get the values of the population size.
+* collect is our collection zone; collect[a,] is the a'th row
+* BP is our projection matrix.  It makes the population grow.  We multiple BP times the numbers at a-1 to get the numbers now at a.
+* `t()` is a function that transposes the vector.  We grabbed a row.  It needs to be a column!
+
+If this worked, we should now have a full collection box
+
+```{r}
+head(collect)
+tail(collect)
+```
+
+Fantastic.  It should not be too surprising that we have exponetial growth here, with MASSIVE populations sizes.  I hope you all remember that if we plot these data, it WILL look like an exponential growth curve.  And I hope you all remember that if we `log` exponential data, we turn it into a straight line.  This DOES have value, as we'll see.
+
+# Visualising these data
+
+The first thing we do is create a total populaton size column in the data frame.  After that, we can plot these data.
+
+```{r}
+Total<-mutate(collect, 
+  TotalPop = Age1+Age2+Age3+Age4,
+  Time = 1:nits)
+
+ggplot(Total, aes(x = Time,  y = log(TotalPop)))+
+  geom_line()+
+  theme_classic(base_size = 15)
+```
+
+That's nice, but what we want is the following, showing the trajectory of each age class; note how log(Abundance) is on the y-axis and the parallel lines indicate something very useful!:
+
+```{r, echo = FALSE}
+library(reshape2)
+long<-melt(Total, 
+          # this is the fixed variable
+          id.vars = c("Time"),
+          # these are what we want to stack up
+          measure.vars=c("Age1","Age2","Age3","Age4"),
+          # this is what we will called the stacked labels
+          variable.name = "Age",
+          # this is what we call the stacked values
+          value.name = "Abund")
+
+# now use ggplot!
+ggplot(long, aes(x =Time, y = log(Abund), group = Age, col = Age))+
+  geom_line()+
+  theme_classic()
+```
+
+
+# How to do this
+To really take advantage of ggplot here, and the automatic legend etc, we use the reshape2 package to turn these "wide" data into a long format data frame.  We take Age1 - Age 4 labels and make them into a variable called Age and the values from those 4 columns go into a column called Abund.  Time gets replicated for us!
+
+```{r}
+library(reshape2)
+long<-melt(Total, 
+          # this is the fixed variable
+          id.vars = c("Time"),
+          # these are what we want to stack up
+          measure.vars=c("Age1","Age2","Age3","Age4"),
+          # this is what we will label the stacked categories
+          variable.name = "Age",
+          # this is what we label the stacked values
+          value.name = "Abund")
+
+# now use ggplot!
+ggplot(long, aes(x =Time, y = log(Abund), group = Age, col = Age))+
+  geom_line()+
+  theme_classic()
+```
+
+One thing we can see, having plotted this on the log scale, is that the lines are parallel, indicating that by year 5, we have reached a stable age distribution.  Can you see that?  There is a fixed proportion of the population in each age now.  And here is how you can use dplyr to PROVE this.
+
+```{r}
+summarise(group_by(Total, Time),
+          Age1_Prop = Age1/TotalPop,
+          Age2_Prop = Age2/TotalPop,
+          Age3_Prop = Age3/TotalPop,
+          Age4_Prop = Age4/TotalPop)
+```
+
+Finally, it is worth noting that when we did the `eigen()` analysis to get the growth rate, we also received some eigenvectors.  The first column of this set of vectors, when normalised to sum to 1, returns exactly what we just saw above... the stable age distribution.
+
+```{r}
+v1 <- eigen(BP)$vectors[,1]
+v1_Sum <- sum(eigen(BP)$vectors[,1])
+# Stable Age
+v1 / v1_Sum
+```
+
+## Brute Force Sensitivity
+
+The final thing to learn is how to change values in the matrix and re-evaluate the growth rate (e.g. using eigen() to get population growth).  We might want to do this to assess whether increasing fertility or survival will benefit the population.  Or simulate whether habitat loss for juveniles or adults might mess things up.
+
+Remember that our original matrix is called BP.  Lets look at it again.
+
+```{r}
+BP
+```
+
+Lets imagine now that a hotel development along the beach is threatening age 3 reproduction, with the potential for a 50% decrease.  It is currently 0.8.  50% less is 0.8 * 0.5.... right?  Or 0.8 - 0.5 * 0.8.
+
+To do this, recall [row, column] syntax.  And some good practice, which involves using a copy of the original matrix.
+
+```{r}
+# create a copy of BP
+BP_change<-BP
+
+# decrease row 1, col 3 by 50% and make sure it is in the BP_change
+BP_change[1,3] <- BP[1,3]*0.5
+
+# compare row 1, col 3
+BP
+BP_change
+
+# Now check growth rate of both to compare
+round(eigen(BP)$value[1],2)
+round(eigen(BP_change)$value[1],2)
+```
+
+Hooray.  A 50% decrease in age 3 fertility has almost no effect on population growth.
+
