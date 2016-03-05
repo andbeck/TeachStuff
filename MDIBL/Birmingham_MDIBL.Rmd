@@ -2,7 +2,7 @@
 title: "BirminghamMDIBL"
 author: "APB"
 date: "28 February 2016"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -11,14 +11,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Using R with Rstudio is AWESOME.  
 Building an annotated, archived, repeatable, share-able cross platform record of what you do.
 
-- 4 panes: the console (engine), the script (your code), Plots/Packages and Data Stuff
+4 panes: 
+
+* the console (engine)
+* the script (your code)
+* Plots/Packages
+* Data Stuff
 
 ![Rstudio Four Panes](figures/RStudioFigure2.png)
+
+## Getting Help
+There are many ways.  Inside R, we use `?` and `??` or `help.start()`, which spawns a web browser.  Outside R, we use.... google!  But there is something MUCH better.  Stackoverflow.  This has an R channel, and here you will find VERY constructive answers to questions, including code and graphs.  It has rapidly become the go-to location for help.  Lots of R developers are active there.
+
+[LINK to StackR](http://stackoverflow.com/tags/r/info)
+
+![StackR](figures/StackR.png)
 
 ## Using R as a calculator
 
 R is a big giant calculator.  Lets practice in the CONSOLE.  As you do these, WATCH what RStudio does with ()'s
 
+## Practical
 ```{r, eval = FALSE}
 # ----------------------------------------------------------------------
 # BASIC PRACTICAL
@@ -34,7 +47,7 @@ sin(2*pi)
 sqrt(81)
 ```
 
-What you should know from this.
+#### *What you should know from this.*
 
 * R does maths correctly
 * the default logarithm is ln, not base 10
@@ -63,13 +76,14 @@ seq(from = 1, to = 10, by = 1) # note the three arguments, from, to and by
 seq(from = 1, to = 10, length = 12) # note the three arguments, from, to and length
 ```
 
-What we learn here: 
+#### *What you should know from this.*
 
 * R can make sequences of integers easily
 * seq() is a function with at least three arguments.
 * from, to, by is a sequence in "steps"
 * from, to, length is a sequnce of a fixed number of numbers.
 
+## Assignment of numbers, vectors and data to *objects*
 You can make objects in R.  We call this ASSIGNMENT, and we typically use `<-` (not `=`, though it is possible)
 
 ```{r, eval = FALSE}
@@ -87,7 +101,7 @@ x+y
 x*y
 ```
 
-What we learn here:
+#### *What you should know from this.*
 
 * You can create objects to use.
 * The objects can be vectors, matrices, data frames etc.
@@ -129,7 +143,7 @@ myDat <- data.frame(Beer = x, Goggles = y)
 myDat
 ```
 
-What we learn here:
+#### *What you should know from this.*
 
 * data.frame makes a spreadsheet like object with columns
 * we name the data frame using `<-`
@@ -142,19 +156,20 @@ Right...lets make the picture!
 plot(y ~ x, data = myDat, type = "b")
 ```
 
-What we learn here:
+#### *What you should know from this.*
+
 * plot is nice
 * when the data frame has column names that are nice, they look nice on the graph
 * the `type` argument *b* is for both.  *p* is for points only. *l* is for lines only.
 
-Plots can be customised.... here we alter the limits of the y-axis, the label on the x-axis, and make the points filled with cornflowerblue-ness....
+Plots can be customised.... here we alter the limits of the y-axis (`ylim`), the label on the x-axis (`xlab`), the size points (character expansion: `cex`), and make the points filled (point character; `pch`) with cornflowerblue-ness (`col`) ....
 
 ```{r}
 # FORMULA INTERFACE
 plot(y ~ x, data = myDat, type = "b",
      ylim = c(0,120),
      xlab = "Good Beer",
-     pch = 19, col = "cornflowerblue")
+     pch = 19, cex = 2, col = "cornflowerblue")
 ```
 
 ## Back to some Mechanics... Managing Packages
@@ -190,7 +205,7 @@ install.packages(c('ggplot2', 'dplyr'))
 # The second line gets a specific set of packages.... you'll be using these!
 
 source("https://bioconductor.org/biocLite.R")
-biocLite(c("edgeR", "KEGGREST", "pathview","org.Dr.eg.db")
+biocLite(c("edgeR", "DESeq2", "KEGGREST", "pathview","org.Dr.eg.db")
 ```
 
 Some stuff will happen on your screen when you do this...
