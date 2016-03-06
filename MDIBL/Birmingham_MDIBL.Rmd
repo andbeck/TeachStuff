@@ -1,6 +1,6 @@
 ---
 title: "BirminghamMDIBL"
-author: "APB"
+author: "Andrew P. Beckerman, University of Sheffield"
 date: "28 February 2016"
 output: html_document
 ---
@@ -8,6 +8,10 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+____________________________________________________
+# Part I starts here....
+____________________________________________________
+
 ## Using R with Rstudio is AWESOME.  
 Building an annotated, archived, repeatable, share-able cross platform record of what you do.
 
@@ -56,18 +60,20 @@ sqrt(81)
 Lets look at what more R can do.  Here we see the basics of how R can make sequences.  We see it can make integers using ':' and sequences of certain lengths or 'by' certain steps.
 
 ## Moving to the script.
-Lets start using the script now.  Add some basic annotation at the top and a good practice activity - clearing R's brain.
+Lets start using the script now.  Add some basic annotation at the top, a place holder for libraries (see below) and a good practice activity - clearing R's brain.
 
 ```{r, eval = FALSE}
 # NAME
 # DATE
 # Intro to R script
 
+# libraries I need to use
+
 # clear R's brain
 rm(list = ls())
 ```
 
-Now, lets have some more fun... building sequences of numbers to see how R works.
+Now, lets have some more fun... building sequences of numbers to see how R works.  Add these to your script.  Once you've added them, try this.  Simply place the flashing cursor on the line with `1:10`.  Now, press `CTRL - Enter`.  This should send the code from the script to the console.  Don't forget to save your script too!!! 
 
 ```{r, eval = FALSE}
 # Sequences, Vectorisation
@@ -82,6 +88,7 @@ seq(from = 1, to = 10, length = 12) # note the three arguments, from, to and len
 * seq() is a function with at least three arguments.
 * from, to, by is a sequence in "steps"
 * from, to, length is a sequnce of a fixed number of numbers.
+* CTRL - Enter sends info from the script to the console.
 
 ## Assignment of numbers, vectors and data to *objects*
 You can make objects in R.  We call this ASSIGNMENT, and we typically use `<-` (not `=`, though it is possible)
@@ -111,21 +118,6 @@ x*y
 
 ## Seeing what you've done, inside R.
 
-Lets move focus to the console for a moment.... wait.  Have you saved the script?
-Use CTRL - 2.  Ohhh - check out the View Menu...
-Once there, type:
-
-`ls()`
-
-```{r, echo = FALSE}
-# A UNIX LIKE VIEW OF WHAT YOU'VE MADE - remember ls in unix is listing what is in the directory
-
-# ls() lists the objects in your workspace
-ls()
-```
-
-`ls()` in R is like `ls` in unix/linux.  It is listing the objects....
-
 ## Making some graphics.... BASE graphics
 
 Here we introduce the basics of making a plot.  There are several ways to make pictures.  The most popular now is ggplot2, but there is also the lattice library.  More on packages and libraries below.
@@ -135,10 +127,11 @@ Start by making some data.  Then, roll this data in to a data frame, which is li
 We use the base function `plot()` and a *formula* that specifies the y and the x axes of the plot.
 
 ```{r}
-# Your first plot
+# Your first DataFrame
 x <- 1:10
 y <- x^2
 
+# Make a data.frame from this
 myDat <- data.frame(Beer = x, Goggles = y)
 myDat
 ```
@@ -152,6 +145,7 @@ myDat
 Right...lets make the picture!
 
 ```{r}
+# Your first plot
 # FORMULA INTERFACE
 plot(y ~ x, data = myDat, type = "b")
 ```
@@ -162,7 +156,8 @@ plot(y ~ x, data = myDat, type = "b")
 * when the data frame has column names that are nice, they look nice on the graph
 * the `type` argument *b* is for both.  *p* is for points only. *l* is for lines only.
 
-Plots can be customised.... here we alter the limits of the y-axis (`ylim`), the label on the x-axis (`xlab`), the size points (character expansion: `cex`), and make the points filled (point character; `pch`) with cornflowerblue-ness (`col`) ....
+## *Semi-*ADVANCED Plots
+Plots can be customised.... here we alter the limits of the y-axis (`ylim`), the label on the x-axis (`xlab`), the size points (character expansion: `cex`), and make the points filled (point character; `pch`) with cornflowerblue-ness (`col`) .... and note the `c()` is a collector....`ylim = c(0,120)` specifies that the lower and uppler limit of the y-axis is 0 and 120.
 
 ```{r}
 # FORMULA INTERFACE
@@ -197,7 +192,7 @@ Here are the basics for installing stuff.
 # install.packages gets packages and installs them
 # SEE RSTUDIO TOO!
 
-install.packages(c('ggplot2', 'dplyr'))
+install.packages(c('gplots','ggplot2', 'dplyr'))
 
 # R - bioconductor
 # the first line grabs a special piece of code to make it easy to get packages from
@@ -210,9 +205,15 @@ biocLite(c("edgeR", "DESeq2", "KEGGREST", "pathview","org.Dr.eg.db")
 
 Some stuff will happen on your screen when you do this...
 
-You have to think about packages like this.  You INSTALL PACKAGES from an app store.  To use them, however, we need to invoke a second function (like pressing on the icon).  This is called `library()`
+Of course, you can also use RStudio to install packages.
 
-Typically, we'd do the isntallations - and you only need to do this ONCE - and then put the library() commands at the top of your script....
+![Install](figures/RStudioInstallPKGs.png)
+
+
+#### Think about packages in this fun way
+You should think about packages like this.  You INSTALL PACKAGES from an app store.  To use them, however, we need to invoke a second function (like pressing on the icon).  This is called `library()`
+
+Typically, we'd do the istallations - and you only need to do this ONCE - and then put the library() commands at the top of your script....
 
 ```{r, eval = FALSE}
 # I need these libraries
@@ -221,7 +222,14 @@ library(pathview)
 library(org.Dr.eg.db)
 ```
 
-## Last *formal* thing - reading data in from the web, or your own computer.
+## This is what the beginning of your script might look like....  good practice.
+![ScriptStart](figures/ScriptStarter.png)
+
+____________________________________________________
+# PART II Starts here....
+____________________________________________________
+
+## Reading data in from the web, or your own computer.
 
 ```{r}
 # ----------------------------------------------------------------------
@@ -257,14 +265,15 @@ myList <- list(x = 1:10,
 ```
 
 ## What lies below is a bit about how to find your way around data
+
 'omics data structures are highly variable.  Things are stored in data frames and in lists.  Below you have 
 - an introduction to `[row, column]`, `$` for grabbing bits of data frames
 - an introducto to `subset()` for more efficient grabbing
 - an introduction to `[[ ]]` for grabbing things from lists
 
-You'll want to work through these before tomorrow's activities.
+You'll want to work through these....
 
--NOTE - lots of people are using the package dplyr now with verbs select(), slice(), filter();  VERY good tutorials online
+-NOTE - lots of people are now using the package dplyr now with verbs select(), slice(), filter() as an alternative to BASE functions.  There are VERY good tutorials online.
 
 ```{r}
 # ----------------------------------------------------------------------
@@ -330,7 +339,67 @@ with(myDF,
 # YOU CAN assign the values returned by subset, aggregate and tapply to objects
 mean.nums <- with(myDF, 
 	tapply(X = expression, INDEX = list(category), FUN = mean))
+
+# show me
+mean.nums
 ```
+
+## The apply family and loops
+The `apply` family is a very powerfulf family of functions for working with data frames and "applying" functions to rows and columns.  You see above that `tapply()` takes a column of a data frame, divides it up by the levels of a factor from another column, and applies a function to each group.  VERY handy.
+
+The function `apply()` allows us to "apply" a function to each row or column.  This can be very useful.  The first argument is the data frame, the second an indicator (1 or 2) of wheter to work on rows or columns, and the third the function to use.
+
+Lets imagine we want to divide each numeric variable in the small myDat data frame by 10.  This is what we'd do.
+
+```{r}
+apply(myDat, 2, function(x) {x/10})
+```
+
+Lets dissect this.  We are working with the myDat data frame.  We are going to work on the `COLUMNS`, as we've specified `2`.  The function we are going to use is x/10.  This is interpreted as for every column `x`, do x/10 for every element in x.
+
+Don't get confused by x.  Because we have a `2`, x is EACH column. 
+
+## Transitioning to Unix.
+Lets move focus to the console for a moment.... wait.  Have you saved the script?
+Use CTRL - 2.  Ohhh - check out the View Menu...
+Once there, type:
+
+`ls()`
+
+```{r, echo = FALSE}
+# A UNIX LIKE VIEW OF WHAT YOU'VE MADE - remember ls in unix is listing what is in the directory
+
+# ls() lists the objects in your workspace
+ls()
+```
+
+`ls()` in R is like `ls` in unix/linux.  It is listing the objects....
+
+Now, lets try a few other commands that are similar in Unix and one extra one.
+
+```{r}
+head(myDF) # first six rows
+tail(myDF) # last six
+str(myDF) # STRUCTURE
+```
+
+## Loops.
+You will use loops.  Loops count for you and do things many times.  Lets look at a simple loop:
+
+`for(i in 1:10) {print i}`
+
+This reads, count from 1 to 10, calling the counter i.  At each i, print the number that is i.
+
+Lets look at something more challenging
+
+```{r, echo = TRUE, eval = FALSE}
+# Set each array value its native level plus noise
+for(i in 1:10){
+  array[,i] <- ControlExp + rnorm(1000, sd=.5)
+}
+```
+
+This has the same counter, but is now adding random numbers (`rnorm()`) to something called *ControlExp*, AND for each i, assigning the sum to the *i'th* column in *array* (which we know is by column because [row,column].
 
 ## a more in depth overview of various plottings you can do
 MANY methods for making plots with `omics data.
@@ -372,10 +441,15 @@ library(ggplot2)
 ggplot(myDF, aes(x = size, y = expression))+
 	geom_point(col = "red")+
 	facet_wrap(~category)
+
+ggplot(myDF, aes(x = size, y = expression, col = category))+
+	geom_point()
 ```
 
 ```{r}
 # heatmaps - very common in molecular data
-?heatmap
-heatmap(myList[[3]])
-heatmap(myList$w)
+library(gplots)
+heatmap.2(myList$w,
+          dendrogram="both",
+          trace="none")
+```
