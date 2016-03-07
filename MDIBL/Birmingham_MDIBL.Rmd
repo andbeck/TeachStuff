@@ -2,7 +2,7 @@
 title: "BirminghamMDIBL"
 author: "Andrew P. Beckerman, University of Sheffield"
 date: "28 February 2016"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -12,8 +12,10 @@ ____________________________________________________
 # Part I starts here....
 ____________________________________________________
 
-## Using R with Rstudio is AWESOME.  
-Building an annotated, archived, repeatable, share-able cross platform record of what you do.
+## Using R with Rstudio is AWESOME. 
+Note that they are different.  R is the engine.  The programming language.  The be-all and end-all.  Rstudio is a wrapper around R.  The maker it a bit betterer.
+
+R and RStudio allow building an annotated, archived, repeatable, share-able cross platform record of what you do.
 
 4 panes: 
 
@@ -33,7 +35,7 @@ There are many ways.  Inside R, we use `?` and `??` or `help.start()`, which spa
 
 ## Using R as a calculator
 
-R is a big giant calculator.  Lets practice in the CONSOLE.  As you do these, WATCH what RStudio does with ()'s
+R is a big giant calculator.  Lets practice in the CONSOLE. Type each of these, and press ENTER. As you do these, WATCH what RStudio does with ()'s
 
 ## Practical
 ```{r, eval = FALSE}
@@ -54,13 +56,19 @@ sqrt(81)
 #### *What you should know from this.*
 
 * R does maths correctly
-* the default logarithm is ln, not base 10
-* R has function and objects
+* the default logarithm is the natural log, ln, not base 10
+* R has built in function and pre-defined objects
 
-Lets look at what more R can do.  Here we see the basics of how R can make sequences.  We see it can make integers using ':' and sequences of certain lengths or 'by' certain steps.
+### Try the help - use `?log` to see the help file (lower right) for log....
+```{r, eval = FALSE}
+# ----------------------------------------------------------------------
+# Try the ?
+# ----------------------------------------------------------------------
 
+?log
+```
 ## Moving to the script.
-Lets start using the script now.  Add some basic annotation at the top, a place holder for libraries (see below) and a good practice activity - clearing R's brain.
+Lets start using the script now.  Add some basic annotation at the top, a place holder for libraries (see below) and a good practice activity - clearing R's brain.  Note that the `#` symbol is special.  It designates the verbiage after it as *comment* or *annotation*.  R will NOT try and interpret it.  It is INFORMATION FOR YOU.
 
 ```{r, eval = FALSE}
 # NAME
@@ -73,7 +81,7 @@ Lets start using the script now.  Add some basic annotation at the top, a place 
 rm(list = ls())
 ```
 
-Now, lets have some more fun... building sequences of numbers to see how R works.  Add these to your script.  Once you've added them, try this.  Simply place the flashing cursor on the line with `1:10`.  Now, press `CTRL - Enter`.  This should send the code from the script to the console.  Don't forget to save your script too!!! 
+Now, lets have some more fun... building sequences of numbers to see how R works.  Add each of these lines of code to your script.  Once you've added them, try this.  Simply place the flashing cursor on the line with `1:10`.  Now, press `CTRL - Enter`.  This should send the code from the script to the console.  Don't forget to save your script too!!! 
 
 ```{r, eval = FALSE}
 # Sequences, Vectorisation
@@ -84,26 +92,30 @@ seq(from = 1, to = 10, length = 12) # note the three arguments, from, to and len
 
 #### *What you should know from this.*
 
-* R can make sequences of integers easily
-* seq() is a function with at least three arguments.
-* from, to, by is a sequence in "steps"
-* from, to, length is a sequnce of a fixed number of numbers.
+* R can make sequences of integers easily, via `:`
+* seq() is short for *sequence*.  R is like that.
+* seq() is a function that takes at least three arguments.
+* from, to, by is a sequence in "steps" specified by *by*
+* from, to, length is a sequnce of a fixed number of numbers, specified by *length*. 
+* Or, it is a vector with *length* numbers between *from* and *to*
 * CTRL - Enter sends info from the script to the console.
+* `#` is for comments and annotation.
 
 ## Assignment of numbers, vectors and data to *objects*
-You can make objects in R.  We call this ASSIGNMENT, and we typically use `<-` (not `=`, though it is possible)
+You can make objects in R.  We call this ASSIGNMENT, and we typically use `<-` (not `=`, though it is possible).  Add these to your script and Run each one.
 
 ```{r, eval = FALSE}
 # assignments
 x <- 1:10
 
-# look at it
+# look at it (e.g. press CTRL -ENTER)
 x
 
 # use it to make another variable
 y <- x^2
 
-# work with both
+# use both operations in additional operations.
+# Look at the output carefully!
 x+y 
 x*y
 ```
@@ -118,11 +130,9 @@ x*y
 
 ## Making some graphics.... BASE graphics
 
-Here we introduce the basics of making a plot.  There are several ways to make pictures.  The most popular now is ggplot2, but there is also the lattice library.  More on packages and libraries below.
+Here we introduce the basics of making a plot.  There are several ways to make pictures.  Some pretty good stuff is built into R.  The most *popular* now is ggplot2, which is an add-on. But there is also the lattice library.  More on packages and libraries below.
 
-Start by making some data.  Then, roll this data in to a data frame, which is like a spreadsheet.
-
-We use the base function `plot()` and a *formula* that specifies the y and the x axes of the plot.
+To understand how to make a plot, we need to make some data.  Then, we roll these data in to a data frame, which is like a spreadsheet.
 
 ```{r}
 # Your first DataFrame
@@ -140,7 +150,7 @@ myDat
 * we name the data frame using `<-`
 * we name the columns inside the data.frame using `=`
 
-Right...lets make the picture!
+Right...lets make the picture! We use the base function `plot()` and a *formula* that specifies the y and the x axes of the plot.
 
 ```{r}
 # Your first plot
@@ -185,20 +195,20 @@ Here are the basics for installing stuff.
 # ----------------------------------------------------------------------
 
 # R-CRAN
-# get dplyr and ggplot2 - see http://ggplot2.org and https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html
-# and just use google
-# install.packages gets packages and installs them
-# SEE RSTUDIO TOO!
+# get gplots, dplyr ggplot2
+# see http://ggplot2.org and 
+# https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html
 
 install.packages(c('gplots','ggplot2', 'dplyr'))
 
 # R - bioconductor
-# the first line grabs a special piece of code to make it easy to get packages from
-# BIOCONDUCTOR.
-# The second line gets a specific set of packages.... you'll be using these!
+# the first line grabs a special piece of code 
+# to make it easy to get packages from BIOCONDUCTOR.
+# The second line gets a specific set of packages.... 
+# you'll be using these!
 
 source("https://bioconductor.org/biocLite.R")
-biocLite(c("edgeR", "DESeq2", "KEGGREST", "pathview","org.Dr.eg.db")
+biocLite(c("DESeq2", "KEGGREST", "pathview","org.Dr.eg.db")
 ```
 
 Some stuff will happen on your screen when you do this...
@@ -208,10 +218,13 @@ Of course, you can also use RStudio to install packages.
 ![Install](figures/RStudioInstallPKGs.png)
 
 
-#### Think about packages in this fun way
-You should think about packages like this.  You INSTALL PACKAGES from an app store.  To use them, however, we need to invoke a second function (like pressing on the icon).  This is called `library()`
 
-Typically, we'd do the istallations - and you only need to do this ONCE - and then put the library() commands at the top of your script....
+#### Think about packages in this fun way
+You should think about packages like this.  You INSTALL PACKAGES from an app store.  This is like downloading the app.  
+
+To use them, however, we need to invoke a second function (like pressing on the icon).  This is called `library()`.  It makes the package and all its Goodness executable.
+
+Typically, we'd do the *intallation* which is a *download* from the app store in the CONSOLE or via RStudio.  Then we need to put the `library()` commands at the top of your script.... Remember we left a place holder for this?
 
 ```{r, eval = FALSE}
 # I need these libraries
@@ -220,7 +233,10 @@ library(pathview)
 library(org.Dr.eg.db)
 ```
 
-## This is what the beginning of your script might look like....  good practice.
+### This is what the beginning of your script might look like....  good practice.
+Try and make sure the start of your script is informative, has libraries you need and
+clears the deck before starting.
+
 ![ScriptStart](figures/ScriptStarter.png)
 
 ____________________________________________________
@@ -229,6 +245,7 @@ ____________________________________________________
 
 ## Reading data in from the web, or your own computer.
 
+Add this to your script.
 ```{r}
 # ----------------------------------------------------------------------
 # read some data using read.csv()
@@ -237,23 +254,21 @@ ____________________________________________________
 # this is a path to data on the web
 UrlAddress<-'https://raw.githubusercontent.com/andbeck/RDatas/master/myDF.csv'
 
-# # you will often use a path on your computer
-# compAddress<-'C:/Documents/RStuff/myDF.csv' # windows
-# compAddress<-'~/Documents/RStuff/myDF.csv' # linux/unix/osx
-
 # get the data
 myDF <- read.csv(UrlAddress)
 str(myDF)
 ```
 
-```{r}
+Don't add this....
+```{r, eval = FALSE}
 # # with comp
-# myDF <- read.csv(compAddress)
+myDF <- read.csv(compAddress)
 
 # # also directly using a path
-# myDF <- read.csv('~/Documents/Rstuff')
+myDF <- read.csv('~/Documents/Rstuff/file.csv')
 ```
 
+Add this to your script.... 
 ```{r}
 # ----------------------------
 # make a list (also common)
@@ -262,33 +277,56 @@ myList <- list(x = 1:10,
    w = matrix(rnorm(100,0,1), nrow = 10, ncol = 10, byrow = TRUE))
 ```
 
-## What lies below is a bit about how to find your way around data
+### You will often have data on your computer, from machines etc.  
+When you have your own data, you need to know where it is.... 
+
+The path to the folder where the data is... You can use the path directly.
+```{r, eval = FALSE}
+# # you will often use a path on your computer
+## Windows and OSX/Linux use different slashes for paths
+##... R no longer cares.
+
+compAddress<-'C:\Documents\RStuff\myDF.csv' # windows
+compAddress<-'~/Documents/RStuff/myDF.csv' # linux/unix/osx
+```
+
+Or you can set the working directory in RStudio
+
+![setwd](figures/Set Working Directory.png)
+
+And then just provide the file name.
+
+```{r, eval = FALSE}
+# After using RStudio to set the working directly
+# just define the file
+
+myDf<- read.csv('myDF.csv')
+```
+
+## Finding your way around data.
 
 'omics data structures are highly variable.  Things are stored in data frames and in lists.  Below you have 
 - an introduction to `[row, column]`, `$` for grabbing bits of data frames
 - an introducto to `subset()` for more efficient grabbing
 - an introduction to `[[ ]]` for grabbing things from lists
 
-You'll want to work through these....
+You'll want to work through these.... thoroughly.
 
--NOTE - lots of people are now using the package dplyr now with verbs select(), slice(), filter() as an alternative to BASE functions.  There are VERY good tutorials online.
+-NOTE : lots of people are now using the package dplyr now with verbs `select()`, `slice()`, `filter()` and others as an alternative to BASE functions.  There are VERY good tutorials online.  These are very FAST with LARGE datasets.
 
 ```{r}
 # ----------------------------------------------------------------------
 # Explore the data with important functions in R
 # [ ] and $ and ==
-# REMEMBER: ROWS THEN COLUMNS
-# ----------------------------------------------------------------------
-# NOTE - lots of people are using the package dplyr now with
-# verbs select(), slice(), filter()
-# VERY good tutorials online
-# ----------------------------------------------------------------------
+# REMEMBER: R works 99% of the time with ROWS THEN COLUMNS...
+# e.g. [rows, columns]
 
 # BASE BASICS
 myDF[5,2] # 5th row, 2nd column
-myDF$expression # expression column
-myDF[,1] # column 1
-myList[[3]] # 3rd piece of the list => w
+myDF$expression # use the $ to get the expression column
+myDF[,1] # ONLY 1st COLUMN
+myDF[2,] # ONLY 2nd ROW
+myList[[3]] # double squares for lists; get the 3rd piece of the list => w
 ```
 
 ```{r}
@@ -296,7 +334,7 @@ myList[[3]] # 3rd piece of the list => w
 myList[["w"]][2,] # get the ninth row from the matrix w that is the third element in myList
 myList$w[2,] # get the ninth row from the matrix w that is the third element in myList
 
-# More Harder
+# MORE Harder
 myDF[51:100,] # rows 51:100 are labeled "B"
 myDF[myDF$category=="B",] # rows 51:100, but access functionally by definition in category column.
 ```
@@ -304,7 +342,7 @@ myDF[myDF$category=="B",] # rows 51:100, but access functionally by definition i
 
 ```{r}
 # ----------------------------------------------------------------------
-# learn how to use subset
+# learn how to use subset (?subset, perhaps?)
 # ----------------------------------------------------------------------
 subset(myDF, category=="B") # rows
 subset(myDF, select = "expression") # columns
@@ -320,13 +358,16 @@ Here we introduce the use of BASE functions aggregate and tapply, which are used
 # ----------------------------------------------------------------------
 # Summarize the data using tapply and aggregate
 # ----------------------------------------------------------------------
+# aggregate, formulae style.
+aggregate(expression ~ category, data = myDF, FUN = mean)
+
+# OR argument style; note that with() declares WHERE to look
+# for the column names...
+
 with(myDF, 
 	aggregate(x = expression, by = list(category), FUN = mean))
 
-# OR
-aggregate(expression ~ category, data = myDF, FUN = mean)
-
-#
+# tapply
 with(myDF, 
 	tapply(X = expression, INDEX = list(category), FUN = mean))
 	
@@ -383,16 +424,14 @@ str(myDF) # STRUCTURE
 getwd() # get the working directory
 list.files() # list the files in the working directory
 
-# you can also use the menus via Session -> Set Working Directory to SET the working directory
+# don't forget.... you can also use the menus via Session -> Set Working Directory to SET the working directory
 
 ```
-
-![setwd](figures/Set Working Directory.png)
 
 ## Loops.
 You will use loops.  Loops count for you and do things many times.  Lets look at a simple loop:
 
-`for(i in 1:10) {print i}`
+`for(i in 1:10) {print(i)}`
 
 This reads, count from 1 to 10, calling the counter i.  At each i, print the number that is i.
 
