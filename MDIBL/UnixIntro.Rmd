@@ -2,7 +2,7 @@
 title: "Some Unix Basics for Budding Bioinformaticians"
 author: "Andrew P. Beckerman (University of Sheffield)"
 date: "5 March 2016"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -11,7 +11,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Getting Started with Unix and R for Bioinformatics
 
-You WILL use Unix.  You will probably also use Perl, Python and Java.  You will use these and R.  Bioinformatics is full of programming.  You will have to learn how to install programming languages, and applications within these.  It is not trivial.  But the most important thing is to not be scared.  It will mess up.  All the time.  Don't forget it is a computer.  More than likely you can turn it off and on, and it will still work.
+You WILL use Unix.  You will probably also use Perl, Python and Java.  You will use these and R.  Bioinformatics is full of programming.  You will have to learn how to install programming languages, and applications writtne in these.  It is not trivial.  But the most important thing is to not be scared.  It will mess up.  All the time.  Don't forget it is a computer.  More than likely you can turn it off and on, and it will still work.  Just don't throw it out the window.
+
+You will be tempted.
 
 ALSO.  Don't forget the internet.  Stackoverflow is AWESOME and there are stacks of VERY HELPFUL people out there.  Getting help is NOT cheating.
 
