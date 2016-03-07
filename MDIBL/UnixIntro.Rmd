@@ -185,3 +185,7 @@ Hey *samtools*, use your *view* function, with argument *b* on *accepted_hits.ba
 
 * top - examine resource usage (still running?)
 * ps (ps ux) - process status
+
+## R vs. Unix
+
+MAKE A TABLE with getwd/pwd setwd/cd ls/ls head, tail, wc/str, cat, > vs <-

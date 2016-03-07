@@ -116,8 +116,6 @@ x*y
 * operations are by default *element - by - element*
 * there is facility for matrix multiplication and linear algebra
 
-## Seeing what you've done, inside R.
-
 ## Making some graphics.... BASE graphics
 
 Here we introduce the basics of making a plot.  There are several ways to make pictures.  The most popular now is ggplot2, but there is also the lattice library.  More on packages and libraries below.
@@ -362,18 +360,18 @@ Don't get confused by x.  Because we have a `2`, x is EACH column.
 ## Transitioning to Unix.
 Lets move focus to the console for a moment.... wait.  Have you saved the script?
 Use CTRL - 2.  Ohhh - check out the View Menu...
-Once there, type:
+Once in the consol, type:
 
 `ls()`
 
 ```{r, echo = FALSE}
-# A UNIX LIKE VIEW OF WHAT YOU'VE MADE - remember ls in unix is listing what is in the directory
+# A UNIX LIKE VIEW OF WHAT YOU'VE MADE - did you know that 'ls' is unix command to list files in a directory?
+# ls() in R lists objects in the brainspace of R.
+# list.files() lists the files in the WORKING directory
 
 # ls() lists the objects in your workspace
 ls()
 ```
-
-`ls()` in R is like `ls` in unix/linux.  It is listing the objects....
 
 Now, lets try a few other commands that are similar in Unix and one extra one.
 
@@ -381,7 +379,15 @@ Now, lets try a few other commands that are similar in Unix and one extra one.
 head(myDF) # first six rows
 tail(myDF) # last six
 str(myDF) # STRUCTURE
+
+getwd() # get the working directory
+list.files() # list the files in the working directory
+
+# you can also use the menus via Session -> Set Working Directory to SET the working directory
+
 ```
+
+![setwd](figures/Set Working Directory.png)
 
 ## Loops.
 You will use loops.  Loops count for you and do things many times.  Lets look at a simple loop:
