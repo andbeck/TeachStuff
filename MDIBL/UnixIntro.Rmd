@@ -2,7 +2,7 @@
 title: "Some Unix Basics for Budding Bioinformaticians"
 author: "Andrew P. Beckerman (University of Sheffield)"
 date: "5 March 2016"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
