@@ -183,11 +183,14 @@ Just get used to there being a programme (samtools), a function (flagstat) and t
 
 Hey *samtools*, use your *view* function, with argument *b* on *accepted_hits.bam*, *scaffold 36* and write this to *SampleA_Control.scaf36.bam*
 
-## See what's happening
-
-* top - examine resource usage (still running?)
-* ps (ps ux) - process status
-
 ## R vs. Unix
 
-MAKE A TABLE with getwd/pwd setwd/cd ls/ls head, tail, wc/str, cat, > vs <-
+|R Code|Unix Code|
+|:---:|:---:|
+|getwd()|pwd|
+|setwd()|cd|
+|ls()|ls|
+|head()|head|
+|tail()|tail|
+|grep()|grep|
+|<-|>|

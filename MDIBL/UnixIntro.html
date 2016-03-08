@@ -198,16 +198,46 @@ img {
 <p><code>samtools view -b accepted_hits.bam 36 &gt; SampleA_Control.scaf36.bam</code></p>
 <p>Hey <em>samtools</em>, use your <em>view</em> function, with argument <em>b</em> on <em>accepted_hits.bam</em>, <em>scaffold 36</em> and write this to <em>SampleA_Control.scaf36.bam</em></p>
 </div>
-<div id="see-whats-happening" class="section level2">
-<h2>See what’s happening</h2>
-<ul>
-<li>top - examine resource usage (still running?)</li>
-<li>ps (ps ux) - process status</li>
-</ul>
-</div>
 <div id="r-vs.unix" class="section level2">
 <h2>R vs. Unix</h2>
-<p>MAKE A TABLE with getwd/pwd setwd/cd ls/ls head, tail, wc/str, cat, &gt; vs &lt;-</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">R Code</th>
+<th align="center">Unix Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">getwd()</td>
+<td align="center">pwd</td>
+</tr>
+<tr class="even">
+<td align="center">setwd()</td>
+<td align="center">cd</td>
+</tr>
+<tr class="odd">
+<td align="center">ls()</td>
+<td align="center">ls</td>
+</tr>
+<tr class="even">
+<td align="center">head()</td>
+<td align="center">head</td>
+</tr>
+<tr class="odd">
+<td align="center">tail()</td>
+<td align="center">tail</td>
+</tr>
+<tr class="even">
+<td align="center">grep()</td>
+<td align="center">grep</td>
+</tr>
+<tr class="odd">
+<td align="center">&lt;-</td>
+<td align="center">&gt;</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

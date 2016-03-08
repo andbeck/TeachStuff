@@ -155,7 +155,7 @@ Right...lets make the picture! We use the base function `plot()` and a *formula*
 ```{r}
 # Your first plot
 # FORMULA INTERFACE
-plot(y ~ x, data = myDat, type = "b")
+plot(Goggles ~ Beer, data = myDat, type = "b")
 ```
 
 #### *What you should know from this.*
@@ -169,7 +169,7 @@ Plots can be customised.... here we alter the limits of the y-axis (`ylim`), the
 
 ```{r}
 # FORMULA INTERFACE
-plot(y ~ x, data = myDat, type = "b",
+plot(Goggles ~ Beer, data = myDat, type = "b",
      ylim = c(0,120),
      xlab = "Good Beer",
      pch = 19, cex = 2, col = "cornflowerblue")
@@ -207,8 +207,17 @@ install.packages(c('gplots','ggplot2', 'dplyr'))
 # The second line gets a specific set of packages.... 
 # you'll be using these!
 
+# First run this special Bioconductor thingy.
+# If it gives an error, use http: instead of https:
 source("https://bioconductor.org/biocLite.R")
-biocLite(c("DESeq2", "KEGGREST", "pathview","org.Dr.eg.db")
+
+# Now install the packages
+# if you get asked about installing locally, say YES
+# if you get asked about updating, say YES
+# if you get told that packages are not available for R 3.1 or lower
+# UPDATE your R.  (go to CRAN and install R again)
+
+biocLite(c("DESeq2", "KEGGREST", "pathview","org.Dr.eg.db"))
 ```
 
 Some stuff will happen on your screen when you do this...
@@ -243,29 +252,30 @@ ____________________________________________________
 # PART II Starts here....
 ____________________________________________________
 
-## Reading data in from the web, or your own computer.
+## Reading data into R from your own computer.
 
-Add this to your script.
-```{r}
-# ----------------------------------------------------------------------
-# read some data using read.csv()
-# ----------------------------------------------------------------------
+For your OWN data, there are three steps.  Lets see how this works using some data from the course website.  
 
+Download and save it as _*myDF.csv*_ to a folder (NOT DOWNLOADS).  Now there are three steps:
+
+1. Know where your data is
+2. Set the working directory in RStudio
+
+![setwd](figures/Set Working Directory.png)
+
+And then just provide the file name to `read.csv()`
+```{r, echo = FALSE}
 # this is a path to data on the web
 UrlAddress<-'https://raw.githubusercontent.com/andbeck/RDatas/master/myDF.csv'
-
-# get the data
 myDF <- read.csv(UrlAddress)
-str(myDF)
 ```
 
-Don't add this....
 ```{r, eval = FALSE}
-# # with comp
-myDF <- read.csv(compAddress)
+## with Working Directory RStudio
+myDF <- read.csv('myDF.csv')
 
-# # also directly using a path
-myDF <- read.csv('~/Documents/Rstuff/file.csv')
+## also directly using a path
+# myDF <- read.csv('~/Documents/Rstuff/myDF.csv')
 ```
 
 Add this to your script.... 
@@ -277,35 +287,10 @@ myList <- list(x = 1:10,
    w = matrix(rnorm(100,0,1), nrow = 10, ncol = 10, byrow = TRUE))
 ```
 
-### You will often have data on your computer, from machines etc.  
-When you have your own data, you need to know where it is.... 
-
-The path to the folder where the data is... You can use the path directly.
-```{r, eval = FALSE}
-# # you will often use a path on your computer
-## Windows and OSX/Linux use different slashes for paths
-##... R no longer cares.
-
-compAddress<-'C:\Documents\RStuff\myDF.csv' # windows
-compAddress<-'~/Documents/RStuff/myDF.csv' # linux/unix/osx
-```
-
-Or you can set the working directory in RStudio
-
-![setwd](figures/Set Working Directory.png)
-
-And then just provide the file name.
-
-```{r, eval = FALSE}
-# After using RStudio to set the working directly
-# just define the file
-
-myDf<- read.csv('myDF.csv')
-```
-
 ## Finding your way around data.
 
-'omics data structures are highly variable.  Things are stored in data frames and in lists.  Below you have 
+Genomics and metabolomics data structures are highly variable.  Things are stored in data frames and in lists.  Below you have 
+
 - an introduction to `[row, column]`, `$` for grabbing bits of data frames
 - an introducto to `subset()` for more efficient grabbing
 - an introduction to `[[ ]]` for grabbing things from lists
@@ -336,17 +321,17 @@ myList$w[2,] # get the ninth row from the matrix w that is the third element in 
 
 # MORE Harder
 myDF[51:100,] # rows 51:100 are labeled "B"
-myDF[myDF$category=="B",] # rows 51:100, but access functionally by definition in category column.
+myDF[myDF$category == "B",] # rows 51:100, but by definition of category column.
 ```
 
-
+# Subset is a good function (see also dplyr and filter, slice, and select)
 ```{r}
 # ----------------------------------------------------------------------
 # learn how to use subset (?subset, perhaps?)
 # ----------------------------------------------------------------------
-subset(myDF, category=="B") # rows
-subset(myDF, select = "expression") # columns
-subset(myDF, category=="B", select = "expression") # both
+subset(myDF, category == "B") # rows
+subset(myDF, select = "expression") # columns (note = not ==)
+subset(myDF, category =="B", select = "expression") # both
 ```
 
 ## summarising data
@@ -447,7 +432,8 @@ for(i in 1:10){
 This has the same counter, but is now adding random numbers (`rnorm()`) to something called *ControlExp*, AND for each i, assigning the sum to the *i'th* column in *array* (which we know is by column because [row,column].
 
 ## a more in depth overview of various plottings you can do
-MANY methods for making plots with `omics data.
+MANY methods for making plots with genomics data.
+
 - advanced use of `plot()`
 - introduction to `ggplot2`
 - introduction to `lattice`
@@ -497,4 +483,18 @@ library(gplots)
 heatmap.2(myList$w,
           dendrogram="both",
           trace="none")
+```
+
+# NOTE that we can download data from the web......
+```{r}
+# ----------------------------------------------------------------------
+# read some data using read.csv()
+# ----------------------------------------------------------------------
+
+# this is a path to data on the web
+UrlAddress<-'https://raw.githubusercontent.com/andbeck/RDatas/master/myDF.csv'
+
+# get the data
+myDF <- read.csv(UrlAddress)
+str(myDF)
 ```
